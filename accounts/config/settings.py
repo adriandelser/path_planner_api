@@ -4,7 +4,7 @@ from django.conf import settings
 
 # from django_extras import ClassRef
 
-app_name = "users"
+app_name = ""
 
 
 # serializers
@@ -24,9 +24,3 @@ PICKER_RESPONSE_TIME_INTERVAL = os.environ.get(
 DOMAIN_NAME_REGEX = (
     r"^(?!:\/\/)([a-zA-Z0-9-_])*[a-zA-Z0-9][a-zA-Z0-9-_.]+\.[a-zA-Z]{2,11}?$"
 )
-INTERNAL_NOTIFICATION_RECIPIENTS = {
-    "campus": settings.NOTIFICATION_CAMPUS_EMAIL,
-    "network": settings.NOTIFICATION_NETWORK_EMAIL,
-    "hr": settings.NOTIFICATION_HR_EMAIL,
-    "training": settings.NOTIFICATION_TRAINING_EMAIL,
-}

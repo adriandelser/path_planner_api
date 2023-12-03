@@ -15,7 +15,6 @@ from django.dispatch import Signal
 
 from transitions import EventData, MachineError
 
-from core.utils.generic import get_request_user_from_id
 from django_extras.celery import default_shared_task
 from django_extras.config.models_foreign import MODEL_USER
 from django_extras.state_machine.utils import (
@@ -400,7 +399,7 @@ class StateMachineModel(models.Model):
             # OLD STANDARD to be depreciated.
             if transition.permissions:
                 return any(
-                    self._transition_user.has_perm(f"users.{permission}")
+                    self._transition_user.has_perm(f"accounts.{permission}")
                     for permission in transition.permissions
                 )
             return True
@@ -440,7 +439,7 @@ class StateMachineModel(models.Model):
     @default_shared_task()
     def perform_background_action(**kwargs):
         sender = locate(kwargs.get("sender"))
-        request_user = get_request_user_from_id(kwargs.get("request_user_id"))
+        request_user = MODEL_USER.instance.objects.get(pk=kwargs.get("request_user_id"))
         entity: StateMachineModel = sender.objects.get(pk=kwargs.get("entity_id"))
         kwargs["entity"] = entity
         kwargs["request_user"] = request_user

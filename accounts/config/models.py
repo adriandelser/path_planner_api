@@ -1,6 +1,6 @@
 from django_extras import ClassRef
 
-app_name = "users"
+app_name = "accounts"
 
 # Local models
 prepend_model = f"{app_name}.models."

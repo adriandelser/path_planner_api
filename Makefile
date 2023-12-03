@@ -38,7 +38,7 @@ BOLD ?= \033[1m
 
 DOCKER_COMPOSE			= docker-compose
 DOCKER_COMPOSE_RUN		= $(DOCKER_COMPOSE) run --rm
-DOCKER_COMPOSE_DJANGO	= $(DOCKER_COMPOSE_RUN) django
+DOCKER_COMPOSE_DJANGO	= $(DOCKER_COMPOSE_RUN) server_template_django
 
 .PHONY: all help validate-system-packages dir_setup setup run logs set-rabbitmq-permissions docker
 .PHONY: bash compilemessages createsuperuser docker-django docker-manage makemessages makemigrations migrate shell
@@ -189,7 +189,7 @@ test: clean
 	docker-compose down
 	@echo "$(INFO)Running automatic tests$(COFF)"
 	make run cmd=-d
-	$(DOCKER_COMPOSE_DJANGO) py.test --durations=50 --disable-warnings $(args) $(path); RESULT=$$? ;
+	$(DOCKER_COMPOSE_DJANGO) pytest --durations=50 --disable-warnings $(args) $(path); RESULT=$$? ;
 	$(DOCKER_COMPOSE_DJANGO) rm -rf django_extras/migrations
 
 profile: clean
@@ -213,7 +213,7 @@ data:
 	make docker-refresh
 	make migrate
 	make set-rabbitmq-permissions
-	${DOCKER_COMPOSE_RUN} django ./manage.py loaddata $(path)
+	${DOCKER_COMPOSE_DJANGO} ./manage.py loaddata $(path)
 	make docker
 
 
@@ -222,4 +222,4 @@ prune:
 
 
 schema:
-	$(DOCKER_COMPOSE) run -e AUTHZ_ACTIVE=false -e AUTH_ACTIVE=false -e SHOW_SWAGGER_DOCS=false --rm django ./manage.py spectacular --file schema.yml
+	$(DOCKER_COMPOSE) run -e AUTHZ_ACTIVE=false -e AUTH_ACTIVE=false -e SHOW_SWAGGER_DOCS=false --rm server_template_django ./manage.py spectacular --file schema.yml

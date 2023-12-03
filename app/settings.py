@@ -44,7 +44,7 @@ ALLOWED_ENVIRONMENTS = {
 
 if ENVIRONMENT not in ALLOWED_ENVIRONMENTS:
     raise ImproperlyConfigured(
-        f"ENVIRONMENT must be set to one of: {ALLOWED_ENVIRONMENTS}"
+        f"ENVIRONMENT:{ENVIRONMENT} must be set to one of: {ALLOWED_ENVIRONMENTS}"
     )
 # Running in development or production mode
 if ENVIRONMENT == "development":
@@ -106,7 +106,6 @@ if "POSTGRES_SLAVE_HOST" in os.environ:
 
 # Middleware
 MIDDLEWARE = [
-    "core.utils.middleware.stats_middleware",
     *_db_middleware,
     "crum.CurrentRequestUserMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -115,7 +114,7 @@ MIDDLEWARE = [
     "django_extras.cache.CacheMiddleware",
 ]
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "accounts.User"
 
 # Redis config (used for caching and celery)
 # if REDIS_URL is provided it will take precedence, REDIS_HOST etc
@@ -264,7 +263,7 @@ if DEBUG:
 
 # Metrics, exception reporting, etc.
 # App insights
-AZURE_APP_INSIGHTS_KEY = load_env_val("AZURE_APP_INSIGHTS_KEY", default=None)
+AZURE_APP_INSIGHTS_KEY = load_env_val("AZURE_APP_INSIGHTS_KEY", default=False)
 if AZURE_APP_INSIGHTS_KEY:
     APPLICATION_INSIGHTS = {
         "ikey": AZURE_APP_INSIGHTS_KEY,
@@ -275,11 +274,9 @@ if AZURE_APP_INSIGHTS_KEY:
     MIDDLEWARE.append("applicationinsights.django.ApplicationInsightsMiddleware")
 
 # Sentry
-SENTRY_DSN = load_env_val("SENTRY_DSN", default=None)
-SENTRY_SAMPLE_RATE = float(load_env_val("SENTRY_SAMPLE_RATE", 0.05))
-SENTRY_PERFORMANCE_SAMPLE_RATE = float(
-    load_env_val("SENTRY_PERFORMANCE_SAMPLE_RATE", 0.05)
-)
+SENTRY_DSN = load_env_val("SENTRY_DSN", default=False)
+SENTRY_SAMPLE_RATE = load_env_val("SENTRY_SAMPLE_RATE", 0.05)
+SENTRY_PERFORMANCE_SAMPLE_RATE = load_env_val("SENTRY_PERFORMANCE_SAMPLE_RATE", 0.05)
 
 if SENTRY_DSN:
     sentry_integrations = [DjangoIntegration()]
@@ -313,6 +310,9 @@ if SENTRY_DSN:
 # Django toolbar
 SHOW_BROWSABLE_API = load_env_val(
     "SHOW_BROWSABLE_API", default=True)
+SHOW_DJANGO_TOOLBAR=load_env_val(
+    "SHOW_DJANGO_TOOLBAR",False
+)
 
 if SHOW_DJANGO_TOOLBAR:
     INSTALLED_APPS += ["debug_toolbar"]
@@ -324,15 +324,12 @@ if SHOW_DJANGO_TOOLBAR:
 # Allow swagger
 SHOW_SWAGGER_DOCS = load_env_val("SHOW_SWAGGER_DOCS") in ("true", "1")
 
-
 def show_toolbar(request):
     return bool(SHOW_DJANGO_TOOLBAR)
 
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": load_env_val(
-    "SHOW_DJANGO_TOOLBAR"
-)
+    "SHOW_TOOLBAR_CALLBACK": SHOW_DJANGO_TOOLBAR
 }
 
 # DRF

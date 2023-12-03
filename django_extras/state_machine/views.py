@@ -8,10 +8,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from transitions import MachineError
 
-from core.state_machine.transition_serializers import validate_transition_payload
-from core.utils.permissions import ModelActionPermission
 from django_extras.state_machine.models import StateMachineModel
-from users.config.models_foreign import MODEL_TASK
 
 
 class StateMachineViewMixin:
@@ -30,7 +27,7 @@ class StateMachineViewMixin:
         bypass_acl_check=False,
     ):
         if transition_permission_classes is None:
-            transition_permission_classes = [ModelActionPermission]
+            transition_permission_classes = []
         # Retrieve necessary parameters from class
 
         @extend_schema(
@@ -76,13 +73,10 @@ class StateMachineViewMixin:
             name = queryset.model.transitions_cls.transitions_api()[name]
             obj: StateMachineModel = self.get_object()
 
-            payload = validate_transition_payload(obj, name, request.data)
-
             try:
                 with transaction.atomic():
                     trigger_success = obj.trigger(
                         name,
-                        payload=payload,
                         user_id=request.user.id,
                     )
                     if not trigger_success:
@@ -105,8 +99,6 @@ class StateMachineViewMixin:
             instance = self.get_object(**get_object_params)
             serializer_kwargs = {"instance": instance, "return_nested_data": True}
 
-            if type(instance) != MODEL_TASK.instance:
-                serializer_kwargs.update({"context": {"request": request}})
 
             response_serializer = self.get_serializer(**serializer_kwargs)
 

@@ -5,13 +5,8 @@ from django.urls import include, path
 import rest_framework.exceptions
 from rest_framework import routers
 
-import clients.urls
-import core.urls
-import files.urls
-import softskills.urls
-import status.urls
-import tasks.urls
-import users.urls
+
+import accounts.urls
 
 # API urls
 router = routers.SimpleRouter(trailing_slash=False)
@@ -25,13 +20,7 @@ handler500 = rest_framework.exceptions.server_error
 handler400 = rest_framework.exceptions.bad_request
 
 urlpatterns = [
-    path("", include(clients.urls)),
-    path("", include(core.urls)),
-    path("", include(files.urls)),
-    path("", include(status.urls)),
-    path("", include(softskills.urls)),
-    path("", include(users.urls)),
-    path("", include(tasks.urls)),
+    path("", include(accounts.urls)),
 ]
 
 if settings.PROFILE_REQUESTS:

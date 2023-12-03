@@ -4,7 +4,7 @@ volumes:
   server_template_postgres_13_data: {}
 
 services:
-  django: &django
+  server_template_django: &server_template_django
     build:
       context: .
     container_name: server_template_django
@@ -38,7 +38,7 @@ services:
     container_name: server_template_redis
 
   celeryworker:
-    <<: *django
+    <<: *server_template_django
     container_name: server_template_celery_worker
     env_file:
       - ".env"
@@ -49,7 +49,7 @@ services:
     command: python manage.py celery_worker
 
   celery-beat:
-    <<: *django
+    <<: *server_template_django
     container_name: server_template_celery_beat
     ports:
       - "5554:5554"
@@ -60,7 +60,7 @@ services:
       - rabbitmq
 
   flower:
-    <<: *django
+    <<: *server_template_django
     container_name: server_template_flower
     ports:
       - "5555:5555"

@@ -8,7 +8,7 @@ import pytest
 @pytest.mark.django_db
 def test_for_missing_migrations():
     output = StringIO()
-    apps = ["clients", "core", "files", "softskills", "status", "tasks", "users"]
+    apps = [ "accounts"]
     try:
         call_command(
             "makemigrations",
