@@ -1,10 +1,8 @@
+import rest_framework.exceptions
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
-
-import rest_framework.exceptions
 from rest_framework import routers
-
 
 import accounts.urls
 

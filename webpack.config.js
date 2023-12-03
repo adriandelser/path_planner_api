@@ -1,11 +1,11 @@
-const path = require('path');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
-const CompressionPlugin = require('compression-webpack-plugin');
-const BundleTrackerPlugin = require('webpack-bundle-tracker');
+const path = require("path");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer");
+const CompressionPlugin = require("compression-webpack-plugin");
+const BundleTrackerPlugin = require("webpack-bundle-tracker");
 
 module.exports = (env) => {
   const isEnvDevelopment = env.development;
@@ -14,61 +14,61 @@ module.exports = (env) => {
 
   return {
     entry: {
-      main: path.resolve(__dirname, 'frontend/static/frontend', 'index.tsx'),
+      main: path.resolve(__dirname, "frontend/static/frontend", "index.tsx"),
     },
-    devtool: isEnvDevelopment ? 'eval' : false,
+    devtool: isEnvDevelopment ? "eval" : false,
     mode: isEnvProduction
-      ? 'production'
+      ? "production"
       : isEnvDevelopment
-      ? 'development'
-      : 'none',
+      ? "development"
+      : "none",
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, "dist"),
       publicPath: isEnvProduction
-        ? 'https://secleadevstorage.blob.core.windows.net/portal-dev/'
-        : '/',
-      filename: 'main.[contenthash].js',
-      chunkFilename: '[name].[contenthash].chunk.js',
+        ? "https://secleadevstorage.blob.core.windows.net/portal-dev/"
+        : "/",
+      filename: "main.[contenthash].js",
+      chunkFilename: "[name].[contenthash].chunk.js",
       hashDigestLength: 8,
     },
     resolve: {
       // Enables absolute paths from tsconfig.json without add alias entries on webpack.config.js
       plugins: [new TsconfigPathsPlugin()],
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     },
     module: {
       rules: [
         {
           test: /\.(js|jsx)$/,
-          loader: 'babel-loader',
+          loader: "babel-loader",
           exclude,
         },
         {
           test: /\.(ts|tsx)$/,
-          loader: 'ts-loader',
+          loader: "ts-loader",
           exclude,
         },
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.scss$/,
-          use: ['sass-loader'],
+          use: ["sass-loader"],
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack', 'file-loader'],
+          use: ["@svgr/webpack", "file-loader"],
         },
         {
           test: /\.(png|jpe?g|gif)$/i,
           use: [
             {
-              loader: 'file-loader',
+              loader: "file-loader",
               options: {
-                name: '[name].[ext]',
-                outputPath: 'media/',
-                publicPath: isEnvProduction ? '/static/media' : '',
+                name: "[name].[ext]",
+                outputPath: "media/",
+                publicPath: isEnvProduction ? "/static/media" : "",
               },
             },
           ],
@@ -78,9 +78,9 @@ module.exports = (env) => {
     plugins: [
       // htmlWebpackPlugin create and run the localhost server
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'frontend/templates', 'index.html'),
+        template: path.join(__dirname, "frontend/templates", "index.html"),
       }),
-      new BundleTrackerPlugin({ filename: './webpack-stats.json' }),
+      new BundleTrackerPlugin({ filename: "./webpack-stats.json" }),
 
       //Speeds up TypeScript type checking (by moving it to a separate process)
       new ForkTsCheckerWebpackPlugin(),
@@ -101,8 +101,8 @@ module.exports = (env) => {
     optimization: {
       splitChunks: {
         // all node_modules will be splitted into their own vendor chunk
-        chunks: 'all',
-        filename: '[name].[contenthash].vendor.js',
+        chunks: "all",
+        filename: "[name].[contenthash].vendor.js",
       },
     },
     devServer: {

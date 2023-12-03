@@ -455,7 +455,9 @@ class StateMachineModel(models.Model):
         entity.save()
 
     def perform_synchronous_action(self, **kwargs):
-        kwargs["request_user"] = get_request_user_from_id(kwargs.get("request_user_id"))
+        kwargs["request_user"] = MODEL_USER.instance.objects.get(
+            pk=kwargs.get("request_user_id")
+        )
         action = getattr(
             self.machine_definition().synchronous_actions_module,
             kwargs.get("transition_name"),

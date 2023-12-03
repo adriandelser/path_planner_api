@@ -47,6 +47,7 @@ requests = "*"
 sentry-sdk = "1.22.2"
 transitions = "*"
 urllib3= ">=1.26.11"
+django-ltree = "^0.5.3"
 
 
 [tool.poetry.group.dev.dependencies]

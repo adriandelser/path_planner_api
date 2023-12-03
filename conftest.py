@@ -1,1 +1,1 @@
-# pytest_plugins = ["django_extras.tests.common"]
+pytest_plugins = ["django_extras.tests.common"]

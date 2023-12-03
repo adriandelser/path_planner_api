@@ -955,6 +955,24 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-ltree"
+version = "0.5.3"
+description = "Django app to support ltree postgres extension"
+optional = false
+python-versions = ">=2.7"
+files = [
+    {file = "django_ltree-0.5.3-py2.py3-none-any.whl", hash = "sha256:9bc8b801d7c26cb38f1f10d80330e29cc5bf83969ff62dd50d2e842e22dcd8c7"},
+    {file = "django_ltree-0.5.3.tar.gz", hash = "sha256:8e47e33f812c14bbb9405b21fb5b7695a15945edca161fbd0b06075adbdf7732"},
+]
+
+[package.dependencies]
+django = ">=1.11"
+six = "*"
+
+[package.extras]
+develop = ["tox", "twine"]
+
+[[package]]
 name = "django-model-utils"
 version = "4.3.1"
 description = "Django model mixins and utilities"
@@ -3386,4 +3404,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f56a8ccbb821f22a1f0647d410e3923ce14c64f03af59d0c112a5c7c6188d59a"
+content-hash = "2e012c70e01d7dde2498336737dfbc58c4a62074a4b6ec40d01bc5150b600512"

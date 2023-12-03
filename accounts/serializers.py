@@ -12,8 +12,7 @@ class UserSerializer(
 
     class Meta:
         model = models.User
-        fields = ("id", "name", "full_name", "avatar", "email", "type", "self")
-
+        fields = ("id", "name", "full_name", "email")
 
 
 class PermissionSerializer(serializers.ModelSerializer):
@@ -27,4 +26,3 @@ class PermissionSerializer(serializers.ModelSerializer):
             "description",
             "model",
         )
-

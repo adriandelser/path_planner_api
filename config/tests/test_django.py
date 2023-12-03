@@ -1,14 +1,13 @@
 from io import StringIO
 
-from django.core.management import call_command
-
 import pytest
+from django.core.management import call_command
 
 
 @pytest.mark.django_db
 def test_for_missing_migrations():
     output = StringIO()
-    apps = [ "accounts"]
+    apps = ["accounts"]
     try:
         call_command(
             "makemigrations",

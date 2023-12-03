@@ -99,7 +99,6 @@ class StateMachineViewMixin:
             instance = self.get_object(**get_object_params)
             serializer_kwargs = {"instance": instance, "return_nested_data": True}
 
-
             response_serializer = self.get_serializer(**serializer_kwargs)
 
             return Response(data=response_serializer.data, status=status.HTTP_200_OK)

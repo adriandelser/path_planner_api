@@ -7,7 +7,7 @@ from abc import abstractmethod
 from kombu import Connection, Exchange, Queue
 from rest_framework import serializers
 
-from app.settings import AMQP_CONNECTION
+from config.settings import AMQP_CONNECTION
 
 logger = logging.getLogger(__name__)
 

@@ -11,13 +11,10 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import json
 import logging
 import os
-from urllib import request
-
-from django.core.exceptions import ImproperlyConfigured
-from django.core.management.utils import get_random_secret_key
 
 import sentry_sdk
-from celery.schedules import crontab
+from django.core.exceptions import ImproperlyConfigured
+from django.core.management.utils import get_random_secret_key
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from django_extras.utils import load_env_val
@@ -56,7 +53,7 @@ else:
 
 # Apps
 SERVER_TEMPLATE_APPS = [
-    "app.apps.ServerTemplateConfig",
+    "config.apps.ServerTemplateConfig",
     "accounts.config.apps.AccountsConfig",
     "django_extras.config.apps.DjangoExtrasConfig",
 ]
@@ -72,9 +69,11 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "rest_framework",
     "taggit",
+    "django_ltree",
 ]
 
 INSTALLED_APPS = SERVER_TEMPLATE_APPS + DJANGO_APPS + THIRD_PARTY_APPS
+AUTH_USER_MODEL = "accounts.User"
 
 # Database
 DATABASES = {
@@ -114,7 +113,6 @@ MIDDLEWARE = [
     "django_extras.cache.CacheMiddleware",
 ]
 
-AUTH_USER_MODEL = "accounts.User"
 
 # Redis config (used for caching and celery)
 # if REDIS_URL is provided it will take precedence, REDIS_HOST etc
@@ -308,11 +306,8 @@ if SENTRY_DSN:
     )
 
 # Django toolbar
-SHOW_BROWSABLE_API = load_env_val(
-    "SHOW_BROWSABLE_API", default=True)
-SHOW_DJANGO_TOOLBAR=load_env_val(
-    "SHOW_DJANGO_TOOLBAR",False
-)
+SHOW_BROWSABLE_API = load_env_val("SHOW_BROWSABLE_API", default=True)
+SHOW_DJANGO_TOOLBAR = load_env_val("SHOW_DJANGO_TOOLBAR", False)
 
 if SHOW_DJANGO_TOOLBAR:
     INSTALLED_APPS += ["debug_toolbar"]
@@ -324,13 +319,12 @@ if SHOW_DJANGO_TOOLBAR:
 # Allow swagger
 SHOW_SWAGGER_DOCS = load_env_val("SHOW_SWAGGER_DOCS") in ("true", "1")
 
+
 def show_toolbar(request):
     return bool(SHOW_DJANGO_TOOLBAR)
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": SHOW_DJANGO_TOOLBAR
-}
+DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": SHOW_DJANGO_TOOLBAR}
 
 # DRF
 REST_FRAMEWORK = {
@@ -345,10 +339,10 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "PAGE_SIZE": 15,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_RENDERER_CLASSES":[
+    "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer"
-    ]
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
 }
 
 # Silence System checks (Use with caution)
@@ -367,8 +361,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Don't allow site's content to be included in frames/iframes.
 X_FRAME_OPTIONS = "DENY"
 
-ROOT_URLCONF = "app.urls"
-WSGI_APPLICATION = "app.wsgi.application"
+ROOT_URLCONF = "config.urls"
+WSGI_APPLICATION = "config.wsgi.application"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/"
 
@@ -388,9 +382,7 @@ SPECTACULAR_SETTINGS = {
         "loginUrl": "/",
         "logoutUrl": "/",
     },
-    "ENUM_NAME_OVERRIDES": {
-
-    },
+    "ENUM_NAME_OVERRIDES": {},
 }
 
 PRESIGNED_LINK_LIFETIME = int(load_env_val("PRESIGNED_LINK_LIFETIME", "3600"))
@@ -428,15 +420,8 @@ CELERY_BEAT_SCHEDULE_ACTIVE = load_env_val(
 
 AMQP_CONNECTION = load_env_val("AMQP_CONNECTION", "")
 
-CELERYBEAT_SCHEDULE = (
-    {
-
-    }
-    if CELERY_BEAT_SCHEDULE_ACTIVE
-    else {}
-)
-CELERY_IMPORTS = [
-]
+CELERYBEAT_SCHEDULE = {} if CELERY_BEAT_SCHEDULE_ACTIVE else {}
+CELERY_IMPORTS = []
 
 FEATURE_FLAGS = load_env_val(
     "FEATURE_FLAGS", default=dict(), validation=lambda x: isinstance(x, dict)

@@ -13,7 +13,7 @@ services:
       - rabbitmq
       - redis
     volumes:
-      - .:/app:z
+      - .:/home/app/web:z
     env_file:
       - ".env"
     ports:

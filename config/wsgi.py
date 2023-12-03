@@ -11,7 +11,7 @@ isort:skip_file
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 from django.core.wsgi import get_wsgi_application  # noqa: E402
 from dj_static import Cling  # noqa: E402

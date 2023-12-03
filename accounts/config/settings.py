@@ -1,10 +1,8 @@
 import os
 
-from django.conf import settings
-
 # from django_extras import ClassRef
 
-app_name = ""
+app_name = "accounts"
 
 
 # serializers

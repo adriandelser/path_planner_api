@@ -1,8 +1,8 @@
-from django_extras.mixins import OptimizedQuerySetAnnotationsMixin
 from django.contrib.auth.models import Permission
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 
+from django_extras.mixins import OptimizedQuerySetAnnotationsMixin
 from . import filters, models, serializers
 
 
@@ -25,6 +25,7 @@ class UserViewSet(
     score_keys = []
     score_ordering = []
 
+
 class PermissionViewSet(
     OptimizedQuerySetAnnotationsMixin,
     viewsets.ModelViewSet,
@@ -33,6 +34,6 @@ class PermissionViewSet(
     List view to retrieve permissions.
 
     """
+
     queryset = Permission.objects.all()
     serializer_class = serializers.PermissionSerializer
-
