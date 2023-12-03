@@ -1,0 +1,88 @@
+version: "3"
+
+volumes:
+  local_postgres_13_data: {}
+
+services:
+  django: &django
+    build:
+      context: .
+    container_name: server_template_django
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    volumes:
+      - .:/app:z
+    env_file:
+      - ".env"
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    # command: gunicorn app.wsgi:application --workers 4 --bind :8000 --access-logfile - --reload
+
+  postgres:
+    image: postgres:13-alpine3.17
+    container_name: server_template_postgres
+    volumes:
+      - local_postgres_13_data:/var/lib/postgresql/data:Z
+    ports:
+      - "${POSTGRES_PORTS:-5432}"
+    env_file:
+      - ".env"
+    command:
+      ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
+
+  redis:
+    image: redis
+    container_name: server_template_redis
+
+  celeryworker:
+    <<: *django
+    container_name: server_template_celery_worker
+    env_file:
+      - ".env"
+    depends_on:
+      - postgres
+      - redis
+    ports: []
+    command: python manage.py celery_worker
+
+  celery-beat:
+    <<: *django
+    container_name: server_template_celery_beat
+    ports:
+      - "5554:5554"
+    volumes:
+      - .data/celery:/celery
+    command: celery --app app beat --loglevel INFO --pidfile= --schedule /celery/celerybeat-schedule
+    depends_on:
+      - rabbitmq
+
+  flower:
+    <<: *django
+    container_name: server_template_flower
+    ports:
+      - "5555:5555"
+    command: celery --app app flower
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    container_name: server_template_rabbitmq
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "secret string"
+      RABBITMQ_NODENAME: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: platform
+    volumes:
+      - "./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"
+      - "./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json"
+    ports:
+      - "15672:15672"
+
+  # clamav:
+  #   image: quay.io/ukhomeofficedigital/clamav
+  #   ports:
+  #     - "3310:3310"
