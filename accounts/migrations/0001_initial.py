@@ -7,5 +7,5 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-         ('django_ltree', '__latest__'),
+        ("django_ltree", "__latest__"),
     ]

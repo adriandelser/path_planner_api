@@ -23,6 +23,5 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "description",
             "model",
         )
