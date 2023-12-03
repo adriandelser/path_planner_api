@@ -1,0 +1,414 @@
+openapi: 3.0.3
+info:
+  title: Server Template
+  version: "0.1"
+  description: Base Django Template
+paths:
+  /permissions:
+    get:
+      operationId: permissions_list
+      description: List view to retrieve permissions.
+      parameters:
+        - name: limit
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - name: offset
+          required: false
+          in: query
+          description: The initial index from which to return the results.
+          schema:
+            type: integer
+      tags:
+        - permissions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPermissionList"
+          description: ""
+    post:
+      operationId: permissions_create
+      description: List view to retrieve permissions.
+      tags:
+        - permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Permission"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Permission"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Permission"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Permission"
+          description: ""
+  /permissions/{id}:
+    get:
+      operationId: permissions_retrieve
+      description: List view to retrieve permissions.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this permission.
+          required: true
+      tags:
+        - permissions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Permission"
+          description: ""
+    put:
+      operationId: permissions_update
+      description: List view to retrieve permissions.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this permission.
+          required: true
+      tags:
+        - permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Permission"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Permission"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Permission"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Permission"
+          description: ""
+    patch:
+      operationId: permissions_partial_update
+      description: List view to retrieve permissions.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this permission.
+          required: true
+      tags:
+        - permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedPermission"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedPermission"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedPermission"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Permission"
+          description: ""
+    delete:
+      operationId: permissions_destroy
+      description: List view to retrieve permissions.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this permission.
+          required: true
+      tags:
+        - permissions
+      responses:
+        "204":
+          description: No response body
+  /users:
+    get:
+      operationId: users_list
+      description: View endpoints for the creation and management of users.
+      parameters:
+        - name: limit
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - name: offset
+          required: false
+          in: query
+          description: The initial index from which to return the results.
+          schema:
+            type: integer
+      tags:
+        - users
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedUserList"
+          description: ""
+    post:
+      operationId: users_create
+      description: View endpoints for the creation and management of users.
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/User"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: ""
+  /users/{id}:
+    get:
+      operationId: users_retrieve
+      description: View endpoints for the creation and management of users.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this user.
+          required: true
+      tags:
+        - users
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: ""
+    put:
+      operationId: users_update
+      description: View endpoints for the creation and management of users.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this user.
+          required: true
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/User"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: ""
+    patch:
+      operationId: users_partial_update
+      description: View endpoints for the creation and management of users.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this user.
+          required: true
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedUser"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedUser"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedUser"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: ""
+    delete:
+      operationId: users_destroy
+      description: View endpoints for the creation and management of users.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this user.
+          required: true
+      tags:
+        - users
+      responses:
+        "204":
+          description: No response body
+components:
+  schemas:
+    PaginatedPermissionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Permission"
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    PatchedPermission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        full_name:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Users full name (diacritics removed and populated automatially)
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Hi
+          maxLength: 254
+    Permission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+      required:
+        - id
+        - model
+        - name
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        full_name:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Users full name (diacritics removed and populated automatially)
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Hi
+          maxLength: 254
+      required:
+        - full_name
+        - id
+        - name
